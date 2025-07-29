@@ -2,10 +2,13 @@
 
 const promise1 = new Promise((resolve, reject) => {
   const logo = document.querySelector('.logo');
-
-  logo.addEventListener('click', () => {
-    resolve();
-  });
+  if (logo) {
+    logo.addEventListener('click', () => {
+      resolve();
+    });
+  } else {
+    reject(new Error('.logo element not found'));
+  }
 });
 
 const promise2 = new Promise((resolve, reject) => {
@@ -16,7 +19,6 @@ const promise2 = new Promise((resolve, reject) => {
 
 function addMessage(text, isError = false) {
   const div = document.createElement('div');
-
   div.className = isError ? 'message error-message' : 'message';
   div.textContent = text;
   document.body.appendChild(div);
@@ -28,4 +30,4 @@ promise1
 
 promise2
   .then(() => addMessage('Promise was resolved!'))
-  .catch(() => addMessage('Promise was rejected!', true));
+  .catch(() => addMessage('Promise was rejected!', true)); 

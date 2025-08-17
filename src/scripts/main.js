@@ -1,35 +1,29 @@
 'use strict';
-
 const promise1 = new Promise((resolve, reject) => {
   const logo = document.querySelector('.logo');
-
   if (logo) {
-    logo.addEventListener('click', () => {
-      resolve();
-    });
+    logo.addEventListener('click', () => resolve());
   } else {
-    reject(new Error('.logo element not found'));
+    reject(new Error("Element '.logo' not found"));
   }
 });
-
 const promise2 = new Promise((resolve, reject) => {
+  void resolve;
   setTimeout(() => {
-    reject(new Error('Promise 2 rejected'));
+    reject(new Error('Timed out after 3s'));
   }, 3000);
 });
-
-function addMessage(text, isError = false) {
+const handleSuccess = () => {
   const div = document.createElement('div');
-
-  div.className = isError ? 'message error-message' : 'message';
-  div.textContent = text;
+  div.className = 'message';
+  div.textContent = 'Promise was resolved!';
   document.body.appendChild(div);
-}
-
-promise1
-  .then(() => addMessage('Promise was resolved!'))
-  .catch(() => addMessage('Promise was rejected!', true));
-
-promise2
-  .then(() => addMessage('Promise was resolved!'))
-  .catch(() => addMessage('Promise was rejected!', true));
+};
+const handleError = (err) => {
+  const div = document.createElement('div');
+  div.className = 'message error-message';
+  div.textContent = `Promise was rejected! ${err?.message ?? ''}`;
+  document.body.appendChild(div);
+};
+promise1.then(handleSuccess).catch(handleError);
+promise2.then(handleSuccess).catch(handleError);
